@@ -87,6 +87,7 @@
             white-space: nowrap !important;
         }
 
+/* 태블릿 이하 (1024px) */
         @media (max-width: 1024px) {
             .hero-section { justify-content: center; }
             .hero-text-pane { 
@@ -97,12 +98,23 @@
                 min-height: 55%;
                 padding: 3rem 1.5rem;
             }
+            
+            /* 갤러리 메인 박스 크기 고정 및 가운데 정렬 */
+            .gallery-main-viewer {
+                height: 320px !important; /* 고정 높이 */
+                margin: 0 auto;           /* 컨테이너 자체를 중앙으로 */
+            }
         }
 
-        /* 600px 이하 폰트 유동적 축소 유지 */
+        /* 모바일 이하 (600px) */
         @media (max-width: 600px) {
             .compact-title {
                 font-size: clamp(1.25rem, 6.5vw, 1.7rem);
+            }
+            /* 더 작은 화면을 위해 크기 소폭 조정 */
+            .gallery-main-viewer {
+                height: 280px !important; /* 고정 높이 */
+                margin: 0 auto;
             }
         }
 
