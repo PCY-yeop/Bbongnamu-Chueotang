@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>뽕나무 명가 - 프리미엄 오디즙 상점</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <meta property="og:title" content="뽕나무 명가 오디즙" />
+    <meta property="og:description" content="서산의 햇살을 담은 100% 순수 오디 원액" />
+    <meta property="og:image" content="https://bbongnamu-chueotang.vercel.app/img/sam.png" />
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #ffffff;
+            word-break: keep-all;
+        }
+
+        .font-serif { font-family: 'Noto Serif KR', serif; }
+
+        /* --- 상단바 정렬 및 전환 버튼 스타일 --- */
+        #nav-logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #nav-switch-btn {
+            background: rgba(234, 88, 12, 0.15); /* 추어탕 오렌지빛 살짝 */
+            border: 1px solid rgba(234, 88, 12, 0.3);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            text-decoration: none;
+        }
+        .nav-scrolled #nav-switch-btn {
+            background: #ea580c;
+            color: white;
+            border-color: #ea580c;
+        }
+        #nav-switch-btn:hover { transform: scale(1.05); filter: brightness(1.1); }
+
+        #navbar { transition: all 0.4s ease-in-out; background-color: transparent; }
+        .nav-scrolled { background-color: rgba(255, 255, 255, 0.95) !important; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding-top: 0.75rem !important; padding-bottom: 0.75rem !important; }
+
+        /* --- Hero Section & Animations --- */
+        .hero-section {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1596434449227-2c186835a1f6?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            animation: kenBurns 10s ease-out forwards;
+        }
+
+        @keyframes kenBurns {
+            from { transform: scale(1.1); }
+            to { transform: scale(1); }
+        }
+
+        .hero-text-pane {
+            position: relative;
+            z-index: 10;
+            width: 42%;
+            max-width: 600px;
+            height: 70%; 
+            margin-right: 5%;
+            background: rgba(255, 255, 255, 0.5); 
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 4rem 10rem 4rem 10rem; 
+            padding: 4rem 3.5rem;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center; 
+            text-align: center;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(50px);
+            animation: slideUpFade 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes slideUpFade { to { opacity: 1; transform: translateY(0); } }
+
+        .fade-in-up { opacity: 0; transform: translateY(20px); animation: fadeInUp 0.8s ease-out forwards; }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+        .delay-1 { animation-delay: 0.4s; }
+        .delay-2 { animation-delay: 0.6s; }
+        .delay-3 { animation-delay: 0.8s; }
+        .delay-4 { animation-delay: 1s; }
+
+        /* --- 기존 index.html 텍스트 크기 Clamp 설정 그대로 --- */
+        .compact-title { font-size: clamp(1.4rem, 2.5vw, 3rem); line-height: 1.35; }
+        .main-menu-title { font-size: clamp(1.1rem, 3vw, 3rem); }
+        .main-menu-price { font-size: clamp(0.9rem, 2vw, 2.5rem); }
+        .main-menu-desc { font-size: clamp(0.7rem, 1.2vw, 1.125rem); }
+
+        .no-wrap { white-space: nowrap !important; }
+
+        /* --- Location & Timetable (공통 스타일) --- */
+        .location-container { border: 1px solid #e5e7eb; border-radius: 2rem; background-color: #ffffff; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); padding: 2.5rem; }
+        .timetable-row { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid #f3f4f6; }
+        .timetable-row:last-child { border-bottom: none; }
+
+        .shop-card { transition: all 0.3s ease; }
+        .shop-card:hover { transform: translateY(-10px); }
+
+        @media (max-width: 1024px) {
+            .hero-section { justify-content: center; }
+            .hero-text-pane { 
+                width: clamp(55%, 90vw, 92%); 
+                max-width: none;
+                margin-right: 0;
+                height: auto;
+                min-height: 55%;
+                padding: 3rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="text-stone-900">
+
+    <!-- Header Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 py-6 px-10">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div id="nav-logo-area">
+                <div id="nav-logo" class="text-2xl font-black font-serif tracking-tighter text-white drop-shadow-md transition-colors duration-300">
+                    뽕나무<span class="text-purple-400">오디즙</span>
+                </div>
+                <!-- 식당 본점 이동 버튼 -->
+                <a href="index.html" id="nav-switch-btn">
+                    <i class="fas fa-utensils"></i>
+                    <span>추어탕 본점 이동</span>
+                </a>
+            </div>
+            <div id="nav-links" class="hidden md:flex space-x-10 font-bold text-white text-sm tracking-widest uppercase transition-colors duration-300">
+                <a href="#home" class="hover:text-purple-400 transition">홈</a>
+                <a href="#benefits" class="hover:text-purple-400 transition">오디효능</a>
+                <a href="#products" class="hover:text-purple-400 transition">제품소개</a>
+                <a href="#shipping" class="hover:text-purple-400 transition">배송안내</a>
+                <a href="#location" class="hover:text-purple-400 transition">오시는길</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="hero-bg"></div>
+        <div class="hero-text-pane">
+            <div class="max-w-full w-full">
+                <div class="flex items-center justify-center gap-3 mb-6 fade-in-up delay-1">
+                    <span class="bg-purple-900 text-white px-4 py-1.5 rounded-full text-[10px] xl:text-[12px] font-black tracking-widest uppercase shadow-lg">Premium Wellbeing</span>
+                    <span class="text-stone-800 font-bold text-[11px] xl:text-[13px] uppercase tracking-tighter">서산 뽕나무 명가</span>
+                </div>
+
+                <h1 class="compact-title font-black font-serif text-stone-900 mb-8 fade-in-up delay-2">
+                    <span class="block no-wrap">진한 <span class="text-purple-800">보랏빛 보약,</span></span>
+                    <span class="block no-wrap text-stone-950">자연의 생기를 마시다</span>
+                </h1>
+
+                <div class="mb-12 fade-in-up delay-3">
+                    <p class="text-base lg:text-lg xl:text-xl text-stone-600 leading-relaxed font-medium">
+                        서산의 햇살을 머금은 100% 오디 원액 <br>
+                        무색소, 무방부제, 무설탕의 진한 감동.
+                    </p>
+                </div>
+                
+                <div class="flex flex-row gap-3 justify-center w-full max-w-[280px] mx-auto fade-in-up delay-4">
+                    <a href="tel:041-688-8853" class="flex-1 bg-purple-700 text-white px-2 py-3 lg:py-3.5 font-black rounded-full shadow-lg hover:bg-purple-800 transition flex items-center justify-center gap-1 text-[10px] lg:text-[12px] xl:text-[14px] no-wrap">
+                        <i class="fas fa-truck text-xs lg:text-sm"></i> 오디즙 주문
+                    </a>
+                    <a href="https://www.instagram.com/pong.chu.tang/" target="_blank" class="flex-1 bg-white/90 border-2 border-stone-900 text-stone-900 px-2 py-3 lg:py-3.5 font-black rounded-full hover:bg-stone-900 hover:text-white transition flex items-center justify-center gap-1 text-[10px] lg:text-[12px] xl:text-[14px] no-wrap">
+                        <i class="fab fa-instagram text-base lg:text-lg"></i> 인스타
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- [1] 오디 효능 섹션 -->
+    <section id="benefits" class="py-24 px-10 bg-stone-50 border-y border-stone-100 text-center">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-16">
+                <h3 class="text-purple-700 font-black text-sm tracking-widest mb-4 uppercase tracking-[0.3em]">Mulberry Benefits</h3>
+                <h2 class="text-3xl lg:text-4xl font-serif font-black mb-4 text-stone-900 text-center">오디가 몸에 좋은 이유</h2>
+            </div>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
+                <div class="p-6 lg:p-8 rounded-2xl bg-white/50 border border-stone-100 shadow-sm transition-all hover:bg-white text-center">
+                    <div class="w-12 h-12 lg:w-16 lg:h-16 bg-purple-100 rounded-full flex items-center justify-center mb-6 mx-auto"><i class="fas fa-eye text-purple-700 text-xl lg:text-2xl"></i></div>
+                    <h4 class="text-base lg:text-xl font-bold mb-2 font-serif text-stone-900">눈 건강</h4>
+                    <p class="text-stone-500 text-[10px] lg:text-sm leading-relaxed">안토시아닌이 풍부합니다.</p>
+                </div>
+                <div class="p-6 lg:p-8 rounded-2xl bg-white/50 border border-stone-100 shadow-sm transition-all hover:bg-white text-center">
+                    <div class="w-12 h-12 lg:w-16 lg:h-16 bg-purple-100 rounded-full flex items-center justify-center mb-6 mx-auto"><i class="fas fa-heartbeat text-purple-700 text-xl lg:text-2xl"></i></div>
+                    <h4 class="text-base lg:text-xl font-bold mb-2 font-serif text-stone-900 text-center">혈압 조절</h4>
+                    <p class="text-stone-500 text-[10px] lg:text-sm leading-relaxed text-center">가바 성분이 가득합니다.</p>
+                </div>
+                <div class="p-6 lg:p-8 rounded-2xl bg-white/50 border border-stone-100 shadow-sm transition-all hover:bg-white text-center">
+                    <div class="w-12 h-12 lg:w-16 lg:h-16 bg-purple-100 rounded-full flex items-center justify-center mb-6 mx-auto text-center"><i class="fas fa-magic text-purple-700 text-xl lg:text-2xl"></i></div>
+                    <h4 class="text-base lg:text-xl font-bold mb-2 font-serif text-stone-900 text-center">노화 방지</h4>
+                    <p class="text-stone-500 text-[10px] lg:text-sm leading-relaxed text-center">강력한 항산화 작용.</p>
+                </div>
+                <div class="p-6 lg:p-8 rounded-2xl bg-white/50 border border-stone-100 shadow-sm transition-all hover:bg-white text-center">
+                    <div class="w-12 h-12 lg:w-16 lg:h-16 bg-purple-100 rounded-full flex items-center justify-center mb-6 mx-auto text-center"><i class="fas fa-shield-alt text-purple-700 text-xl lg:text-2xl"></i></div>
+                    <h4 class="text-base lg:text-xl font-bold mb-2 font-serif text-stone-900 text-center">면역 강화</h4>
+                    <p class="text-stone-500 text-[10px] lg:text-sm leading-relaxed text-center">체력을 보강합니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- [2] 제품 리스트 섹션 -->
+    <section id="products" class="py-24 bg-white px-4 lg:px-10">
+        <div class="max-w-7xl mx-auto text-center">
+            <div class="text-center mb-12 lg:mb-24">
+                <h2 class="text-3xl lg:text-5xl font-serif font-black text-stone-900">오디즙 제품 안내</h2>
+            </div>
+            
+            <!-- 상단 2개 아이템: grid-cols-2를 강제하여 모바일에서도 1:1 유지 -->
+            <div class="grid grid-cols-2 gap-3 lg:gap-12 mb-10 lg:mb-20">
+                <!-- 제품 1 -->
+                <div class="group relative bg-stone-900 p-4 lg:p-10 rounded-[1.5rem] lg:rounded-[3.5rem] shadow-2xl border-t-4 lg:border-t-8 border-purple-700 text-white flex flex-col justify-center min-h-[160px] lg:min-h-[250px] shop-card text-center overflow-hidden">
+                    <div>
+                        <div class="flex flex-col lg:flex-row justify-between items-center mb-2 lg:mb-6">
+                            <span class="text-purple-400 font-black tracking-widest text-[8px] lg:text-xs uppercase bg-white/10 px-2 lg:px-4 py-0.5 lg:py-1 rounded-full mb-1 lg:mb-0">Best</span>
+                            <span class="main-menu-price font-black no-wrap">45,000원</span>
+                        </div>
+                        <h4 class="main-menu-title font-serif font-black mb-1 lg:mb-4 leading-tight">실속형 (30포)</h4>
+                        <p class="main-menu-desc text-stone-400 leading-relaxed hidden md:block">순수한 오디의 맛을 합리적으로.</p>
+                    </div>
+                </div>
+
+                <!-- 제품 2 -->
+                <div class="bg-stone-50 p-4 lg:p-10 rounded-[1.5rem] lg:rounded-[3.5rem] shadow-xl border-t-4 lg:border-t-8 border-purple-900 shop-card flex flex-col justify-center min-h-[160px] lg:min-h-[250px] text-center">
+                    <div>
+                        <div class="flex flex-col lg:flex-row justify-between items-center mb-2 lg:mb-6">
+                            <span class="text-purple-700 font-black tracking-widest text-[8px] lg:text-xs uppercase bg-purple-100 px-2 lg:px-4 py-0.5 lg:py-1 rounded-full mb-1 lg:mb-0">Gift</span>
+                            <span class="main-menu-price font-black text-stone-900 no-wrap">70,000원</span>
+                        </div>
+                        <h4 class="main-menu-title font-serif font-black mb-1 lg:mb-4 leading-tight text-stone-900">선물세트 (50포)</h4>
+                        <p class="main-menu-desc text-stone-500 leading-relaxed hidden md:block">보자기 포장이 포함된 고급 세트.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 하단 부가 제품들 -->
+            <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-6">
+                <div class="bg-white p-4 lg:p-8 rounded-xl lg:rounded-3xl flex justify-between items-center shadow-sm border border-stone-100 font-bold hover:border-purple-200 transition-colors">
+                    <div class="text-left"><span class="block text-[8px] lg:text-[10px] text-stone-400 uppercase tracking-widest">Health Tea</span><span class="text-xs lg:text-lg">뽕나무 잎차</span></div>
+                    <span class="text-purple-700 text-sm lg:text-xl font-black">25,000원</span>
+                </div>
+                <div class="bg-white p-4 lg:p-8 rounded-xl lg:rounded-3xl flex justify-between items-center shadow-sm border border-stone-100 font-bold hover:border-purple-200 transition-colors">
+                    <div class="text-left"><span class="block text-[8px] lg:text-[10px] text-stone-400 uppercase tracking-widest">Free</span><span class="text-xs lg:text-lg">5만원 이상 구매</span></div>
+                    <span class="text-purple-700 text-sm lg:text-xl font-black">무료배송</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- [3] 배송 안내 섹션 -->
+    <section id="shipping" class="py-24 bg-stone-50 border-y border-stone-100 px-10 text-center">
+        <div class="max-w-4xl mx-auto p-12 bg-white rounded-[3.5rem] shadow-sm border border-stone-100">
+            <div class="w-20 h-20 bg-purple-50 rounded-full flex items-center justify-center mx-auto mb-8">
+                <i class="fas fa-truck text-3xl text-purple-700"></i>
+            </div>
+            <h2 class="text-3xl font-serif font-black mb-6">전국 택배 배송 안내</h2>
+            <p class="text-stone-600 text-lg leading-relaxed mb-10">
+                서산 뽕나무 명가의 신선함을 그대로 담아 집 앞까지 안전하게 배송해 드립니다.<br>
+                <strong>오후 2시 이전 주문 시 당일 발송</strong>을 원칙으로 합니다.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <div class="flex items-center gap-3 bg-stone-50 px-6 py-4 rounded-2xl font-bold"><i class="fas fa-check text-purple-700"></i> 안전한 이중 포장</div>
+                <div class="flex items-center gap-3 bg-stone-50 px-6 py-4 rounded-2xl font-bold"><i class="fas fa-check text-purple-700"></i> 철저한 위생 관리</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Info Section (공통) -->
+    <section id="location" class="py-24 px-6 lg:px-10 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col lg:flex-row-reverse gap-8 lg:gap-10">
+                <div class="lg:w-1/2 min-h-[350px]">
+                    <div class="location-container p-0 overflow-hidden shadow-sm h-full border border-stone-200">
+                        <iframe width="100%" height="100%" frameborder="0" style="border:0; height: 100%; min-height: 350px;" src="https://maps.google.com/maps?q=충청남도 서산시 해미면 기지1길 4&t=&z=17&ie=UTF8&iwloc=&output=embed" allowfullscreen></iframe>
+                    </div>
+                </div>
+                
+                <div class="lg:w-1/2 flex flex-col gap-6">
+                    <div class="location-container">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-stone-900 rounded-full flex items-center justify-center text-white shadow-lg"><i class="fas fa-map-marker-alt"></i></div>
+                            <h3 class="font-black text-stone-900 text-lg lg:text-xl">위치 정보</h3>
+                        </div>
+                        <p class="text-base lg:text-xl font-bold text-stone-950 mb-1">충청남도 서산시 해미면 기지1길 4</p>
+                        <p class="text-stone-500 text-xs lg:text-sm">서산 해미면 뽕나무 명가 오디즙</p>
+                    </div>
+
+                    <div class="location-container">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-purple-700 rounded-full flex items-center justify-center text-white shadow-lg"><i class="fas fa-phone-alt"></i></div>
+                            <h3 class="font-black text-stone-900 text-lg lg:text-xl">주문 및 택배 안내</h3>
+                        </div>
+                        <div class="w-full space-y-4 text-left">
+                            <div class="timetable-row">
+                                <span class="font-bold">상담 전화</span>
+                                <span class="font-black text-purple-700">041-688-8853</span>
+                            </div>
+                            <div class="timetable-row">
+                                <span class="font-bold">전국 택배</span>
+                                <span class="text-stone-500">당일 발송 및 예약 가능</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-stone-900 text-white py-12 px-10 text-center">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-xl lg:text-2xl font-serif font-black mb-4 no-wrap">뽕나무 명가 <span class="text-purple-400">&</span> 오디 원액</div>
+            <p class="text-stone-500 text-[10px] lg:text-xs">© 2026 Mulberry Heritage. 서산시 해미면 기지1길 4 | 041-688-8853</p>
+        </div>
+    </footer>
+
+    <script>
+        const navbar = document.getElementById('navbar');
+        const logo = document.getElementById('nav-logo');
+        const links = document.getElementById('nav-links');
+
+        window.addEventListener('scroll', () => {
+            const isScrolled = window.scrollY > 30;
+            navbar.classList.toggle('nav-scrolled', isScrolled);
+            if (isScrolled) {
+                logo.classList.replace('text-white', 'text-stone-900');
+                links?.classList.replace('text-white', 'text-stone-600');
+            } else {
+                logo.classList.replace('text-stone-900', 'text-white');
+                links?.classList.replace('text-stone-600', 'text-white');
+            }
+        });
+    </script>
+</body>
+</html>

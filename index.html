@@ -19,13 +19,51 @@
             font-family: 'Noto Sans KR', sans-serif;
             scroll-behavior: smooth;
             background-color: #ffffff;
+            word-break: keep-all;
         }
+/* 1. 로고와 버튼을 가로로 나란히 정렬하는 설정 */
+#nav-logo {
+    display: flex;
+    align-items: center; /* 세로 중앙 정렬 */
+    gap: 12px;           /* 로고 글자와 버튼 사이의 간격 */
+}
 
+/* 2. 오디즙 테마 전환 버튼 스타일 */
+#nav-switch-btn {
+    background: rgba(124, 58, 237, 0.15); /* 오디즙 보라색 살짝 (rgba 기반) */
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    color: white;
+    padding: 0 14px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 800;
+    display: flex;       /* 버튼 내부 아이콘과 텍스트 가로 정렬 */
+    align-items: center;
+    gap: 6px;            /* 아이콘과 텍스트 사이 간격 */
+    transition: all 0.3s ease;
+    white-space: nowrap; /* 텍스트가 줄바꿈되지 않도록 고정 */
+    text-decoration: none;
+}
+
+/* 3. 스크롤 시 버튼 스타일 변경 (배경이 흰색이 되었을 때 보라색으로 강조) */
+.nav-scrolled #nav-switch-btn {
+    background: #4c17a3; /* 오디즙 보라색 (Violet 600) */
+    color: white;
+    border-color: #4c17a3;
+}
+
+/* 4. 호버 효과 */
+#nav-switch-btn:hover { 
+    transform: scale(1.05); 
+    filter: brightness(1.1); 
+    background: #290a5c; /* 호버 시 조금 더 진한 보라색 */
+    color: white;
+}
         .font-serif {
             font-family: 'Noto Serif KR', serif;
         }
 
-        /* --- Hero Section --- */
+        /* --- Hero Section & Animations --- */
         .hero-section {
             position: relative;
             height: 100vh;
@@ -34,18 +72,33 @@
             align-items: center;
             justify-content: flex-end;
             overflow: hidden;
-            /* 배경 이미지 위치 */
+        }
+
+        /* 배경 이미지 애니메이션 (Ken Burns 효과) */
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background-image: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('./img/img1.jpg');
             background-size: cover;
             background-position: left center;
+            z-index: -1;
+            animation: kenBurns 10s ease-out forwards;
         }
 
-        /* 오른쪽 반투명 박스 */
+        @keyframes kenBurns {
+            from { transform: scale(1.1); }
+            to { transform: scale(1); }
+        }
+
+        /* 텍스트 패널 애니메이션 */
         .hero-text-pane {
             position: relative;
             z-index: 10;
             width: 42%;
-            max-width: 600px; /* PC에서 더 넓게 보이도록 약간 상향 */
+            max-width: 600px;
             height: 70%; 
             margin-right: 5%;
             background: rgba(255, 255, 255, 0.5); 
@@ -60,34 +113,79 @@
             justify-content: center;
             align-items: center; 
             text-align: center;
-            overflow: hidden;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* 초기 상태: 아래에 숨김 */
+            opacity: 0;
+            transform: translateY(50px);
+            animation: slideUpFade 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
-        /* 제목: PC에서 더 크게 보이도록 clamp 최대값 상향 */
+        @keyframes slideUpFade {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 내부 요소 순차적 애니메이션 */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .delay-1 { animation-delay: 0.4s; }
+        .delay-2 { animation-delay: 0.6s; }
+        .delay-3 { animation-delay: 0.8s; }
+        .delay-4 { animation-delay: 1s; }
+
         .compact-title {
             font-size: clamp(1.4rem, 2.5vw, 3rem); 
             line-height: 1.35;
-            word-break: keep-all;
-        }
-
-        /* 버튼 레이아웃: 가로 너비 제한 상향 */
-        .fixed-button-row {
-            display: flex !important;
-            flex-direction: row !important;
-            flex-wrap: nowrap !important;
-            justify-content: center !important;
-            gap: 0.75rem;
-            width: 100%;
-            max-width: 500px; /* 글자 크기 증가에 따른 너비 확보 */
-            margin: 0 auto;
         }
 
         .no-wrap {
             white-space: nowrap !important;
         }
 
-/* 태블릿 이하 (1024px) */
+        /* 메인 메뉴 카드 반응형 폰트 및 높이 최적화 */
+        .main-menu-title {
+            font-size: clamp(1.1rem, 3vw, 3rem);
+        }
+        .main-menu-price {
+            font-size: clamp(0.9rem, 2vw, 2.5rem);
+        }
+        .main-menu-desc {
+            font-size: clamp(0.7rem, 1.2vw, 1.125rem);
+        }
+
+        /* 갤러리 섹션 텍스트 및 레이아웃 조정 */
+        .gallery-content-box {
+            padding: clamp(1rem, 3vw, 4rem);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start; 
+            padding-top: clamp(1.5rem, 5vw, 5rem); 
+        }
+        
+        .gallery-fluid-text {
+            font-size: clamp(0.75rem, 1.3vw, 1.15rem);
+            line-height: 1.6;
+        }
+        
+        .gallery-fluid-title {
+            font-size: clamp(1.35rem, 3.8vw, 4.8rem);
+            letter-spacing: -0.03em;
+        }
+
         @media (max-width: 1024px) {
             .hero-section { justify-content: center; }
             .hero-text-pane { 
@@ -98,27 +196,8 @@
                 min-height: 55%;
                 padding: 3rem 1.5rem;
             }
-            
-            /* 갤러리 메인 박스 크기 고정 및 가운데 정렬 */
-            .gallery-main-viewer {
-                height: 320px !important; /* 고정 높이 */
-                margin: 0 auto;           /* 컨테이너 자체를 중앙으로 */
-            }
         }
 
-        /* 모바일 이하 (600px) */
-        @media (max-width: 600px) {
-            .compact-title {
-                font-size: clamp(1.25rem, 6.5vw, 1.7rem);
-            }
-            /* 더 작은 화면을 위해 크기 소폭 조정 */
-            .gallery-main-viewer {
-                height: 280px !important; /* 고정 높이 */
-                margin: 0 auto;
-            }
-        }
-
-        /* --- Navigation --- */
         #navbar {
             transition: all 0.4s ease-in-out;
             background-color: transparent;
@@ -130,29 +209,21 @@
             padding-bottom: 0.75rem !important;
         }
 
-        /* --- Menu Elements --- */
         .menu-card {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .menu-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
         }
         
-        .badge-pulse { animation: pulse 2s infinite; }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        /* --- Gallery Section Layout --- */
         .gallery-main-viewer {
             width: 100%;
             height: 100%; 
-            border-radius: 2.5rem;
+            border-radius: 1.5rem;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
+        
         .gallery-main-viewer img {
             width: 100%;
             height: 100%;
@@ -167,19 +238,19 @@
             scroll-behavior: smooth;
             -ms-overflow-style: none;
             scrollbar-width: none;
-            gap: 1rem;
+            gap: 0.75rem;
         }
         .gallery-slider-container::-webkit-scrollbar {
             display: none;
         }
         .gallery-thumb-item {
-            flex: 0 0 150px;
+            flex: 0 0 clamp(80px, 15vw, 150px);
             cursor: pointer;
-            border-radius: 1.2rem;
+            border-radius: 0.8rem;
             overflow: hidden;
             opacity: 0.4;
             transition: all 0.3s ease;
-            border: 3px solid transparent;
+            border: 2px solid transparent;
         }
         .gallery-thumb-item.active {
             opacity: 1;
@@ -187,17 +258,15 @@
         }
         .gallery-thumb-item img {
             width: 100%;
-            height: 90px;
+            height: clamp(50px, 8vw, 90px);
             object-fit: cover;
         }
 
-        /* --- Info Section Styles --- */
         .location-container {
             border: 1px solid #e5e7eb;
             border-radius: 2rem;
             background-color: #ffffff;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-            height: 100%;
             padding: 2.5rem;
         }
         
@@ -217,7 +286,11 @@
     <nav id="navbar" class="fixed w-full z-50 py-6 px-10">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div id="nav-logo" class="text-2xl font-black font-serif tracking-tighter text-white drop-shadow-md transition-colors duration-300">
-                뽕나무<span class="text-orange-400">추어탕&낙지볶음</span>
+                뽕나무<span class="text-orange-400">추어탕</span>
+                <a href="mulberry.html" id="nav-switch-btn">
+                    <i class="fas fa-utensils"></i>
+                    <span>오디즙 상점 이동</span>
+                </a>
             </div>
             <div id="nav-links" class="hidden md:flex space-x-10 font-bold text-white text-sm tracking-widest uppercase transition-colors duration-300">
                 <a href="#home" class="hover:text-orange-400 transition">홈</a>
@@ -229,215 +302,204 @@
         </div>
     </nav>
 
-    <!-- Main Hero Section -->
+    <!-- Main Hero Section (애니메이션 적용) -->
     <section id="home" class="hero-section">
+        <div class="hero-bg"></div> <!-- 애니메이션용 배경 레이어 -->
         <div class="hero-text-pane">
             <div class="max-w-full w-full">
-                <!-- 상단 태그 -->
-                <div class="flex items-center justify-center gap-3 mb-6">
+                <div class="flex items-center justify-center gap-3 mb-6 fade-in-up delay-1">
                     <span class="bg-stone-900 text-white px-4 py-1.5 rounded-full text-[10px] xl:text-[12px] font-black tracking-widest uppercase shadow-lg">Premium Heritage</span>
                     <span class="text-stone-800 font-bold text-[11px] xl:text-[13px] uppercase tracking-tighter">서산 해미면 본점</span>
                 </div>
 
-                <!-- 제목: 2줄 구성, PC에서 크기 상향 -->
-                <h1 class="compact-title font-black font-serif text-stone-900 mb-8">
+                <h1 class="compact-title font-black font-serif text-stone-900 mb-8 fade-in-up delay-2">
                     <span class="block no-wrap">세월이 빚은 <span class="text-orange-800">깊은 맛,</span></span>
                     <span class="block no-wrap text-stone-950">건강을 담은 보양 한 상</span>
                 </h1>
 
-                <!-- 설명: PC에서 텍스트 크기 상향 (xl:text-xl 추가) -->
-                <div class="mb-12">
+                <div class="mb-12 fade-in-up delay-3">
                     <p class="text-base lg:text-lg xl:text-xl text-stone-600 leading-relaxed font-medium">
                         뽕나무 육수의 담백한 감동과 <br>
                         활력 넘치는 낙지볶음을 만나보세요.
                     </p>
                 </div>
                 
-                <!-- 버튼: PC에서 텍스트 크기 상향 (xl:text-[16px]) -->
-                <div class="fixed-button-row">
-                    <a href="https://www.instagram.com/pong.chu.tang/" target="_blank" class="flex-1 bg-gradient-to-r from-purple-600 via-red-500 to-orange-500 text-white px-3 py-5 font-black rounded-full shadow-lg hover:brightness-110 transition flex items-center justify-center gap-[5px] text-[14px] xl:text-[16px] no-wrap">
-                        <i class="fab fa-instagram text-xl"></i> 인스타
+                <div class="flex flex-row gap-3 justify-center w-full max-w-[280px] mx-auto fade-in-up delay-4">
+                    <a href="https://www.instagram.com/pong.chu.tang/" target="_blank" class="flex-1 bg-gradient-to-r from-purple-600 via-red-500 to-orange-500 text-white px-2 py-3 lg:py-3.5 font-black rounded-full shadow-lg hover:brightness-110 transition flex items-center justify-center gap-1 text-[10px] lg:text-[12px] xl:text-[14px] no-wrap">
+                        <i class="fab fa-instagram text-base lg:text-lg"></i> 인스타
                     </a>
-                    <a href="tel:041-688-8853" class="flex-1 bg-white/90 border-2 border-stone-900 text-stone-900 px-3 py-5 font-black rounded-full hover:bg-stone-900 hover:text-white transition flex items-center justify-center gap-[5px] text-[14px] xl:text-[16px] no-wrap">
-                        <i class="fas fa-phone-alt text-sm"></i> 041-688-8853
+                    <a href="tel:041-688-8853" class="flex-1 bg-white/90 border-2 border-stone-900 text-stone-900 px-2 py-3 lg:py-3.5 font-black rounded-full hover:bg-stone-900 hover:text-white transition flex items-center justify-center gap-1 text-[10px] lg:text-[12px] xl:text-[14px] no-wrap">
+                        <i class="fas fa-phone-alt text-xs lg:text-sm"></i> 041-688-8853
                     </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 뽕나무 추어탕의 효능 섹션 -->
-    <section id="benefits" class="py-24 px-10 bg-stone-50 border-y border-stone-100 text-center text-center">
+    <!-- 효능 섹션 -->
+    <section id="benefits" class="py-24 px-10 bg-stone-50 border-y border-stone-100 text-center">
         <div class="max-w-7xl mx-auto">
             <div class="mb-16">
                 <h3 class="text-orange-700 font-black text-sm tracking-widest mb-4 uppercase tracking-[0.3em]">Health Benefits</h3>
-                <h2 class="text-4xl font-serif font-black mb-4 text-stone-900 text-center">뽕나무 추어탕이 특별한 이유</h2>
+                <h2 class="text-3xl lg:text-4xl font-serif font-black mb-4 text-stone-900 text-center">뽕나무 추어탕이 특별한 이유</h2>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="p-8 rounded-2xl bg-white/50 border border-stone-100 shadow-sm transition-all hover:bg-white text-center">
-                    <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-6 mx-auto"><i class="fas fa-bolt text-orange-700 text-2xl"></i></div>
-                    <h4 class="text-xl font-bold mb-4 font-serif text-stone-900">원기 회복</h4>
-                    <p class="text-stone-500 text-sm leading-relaxed">고단백 미꾸라지와 필수 아미노산이 기력을 회복시킵니다.</p>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
+                <div class="p-6 lg:p-8 rounded-2xl bg-white/50 border border-stone-100 shadow-sm transition-all hover:bg-white text-center">
+                    <div class="w-12 h-12 lg:w-16 lg:h-16 bg-orange-100 rounded-full flex items-center justify-center mb-6 mx-auto"><i class="fas fa-bolt text-orange-700 text-xl lg:text-2xl"></i></div>
+                    <h4 class="text-base lg:text-xl font-bold mb-2 font-serif text-stone-900">원기 회복</h4>
+                    <p class="text-stone-500 text-[10px] lg:text-sm leading-relaxed">기력을 회복시킵니다.</p>
                 </div>
-                <div class="p-8 rounded-2xl bg-white/50 border border-stone-100 shadow-sm transition-all hover:bg-white text-center">
-                    <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-6 mx-auto"><i class="fas fa-tint text-orange-700 text-2xl"></i></div>
-                    <h4 class="text-xl font-bold mb-4 font-serif text-stone-900 text-center">혈관 건강</h4>
-                    <p class="text-stone-500 text-sm leading-relaxed text-center">뽕나무의 루틴 성분이 혈압 조절과 혈관 강화에 도움을 줍니다.</p>
+                <div class="p-6 lg:p-8 rounded-2xl bg-white/50 border border-stone-100 shadow-sm transition-all hover:bg-white text-center">
+                    <div class="w-12 h-12 lg:w-16 lg:h-16 bg-orange-100 rounded-full flex items-center justify-center mb-6 mx-auto"><i class="fas fa-tint text-orange-700 text-xl lg:text-2xl"></i></div>
+                    <h4 class="text-base lg:text-xl font-bold mb-2 font-serif text-stone-900 text-center">혈관 건강</h4>
+                    <p class="text-stone-500 text-[10px] lg:text-sm leading-relaxed text-center">혈압 조절에 도움.</p>
                 </div>
-                <div class="p-8 rounded-2xl bg-white/50 border border-stone-100 shadow-sm transition-all hover:bg-white text-center text-center">
-                    <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-6 mx-auto text-center"><i class="fas fa-leaf text-orange-700 text-2xl text-center text-center text-center"></i></div>
-                    <h4 class="text-xl font-bold mb-4 font-serif text-stone-900 text-center text-center text-center">당뇨 관리</h4>
-                    <p class="text-stone-500 text-sm leading-relaxed text-center text-center text-center">천연 혈당 강하 작용으로 당뇨 환자에게도 좋은 보양식입니다.</p>
+                <div class="p-6 lg:p-8 rounded-2xl bg-white/50 border border-stone-100 shadow-sm transition-all hover:bg-white text-center">
+                    <div class="w-12 h-12 lg:w-16 lg:h-16 bg-orange-100 rounded-full flex items-center justify-center mb-6 mx-auto text-center"><i class="fas fa-leaf text-orange-700 text-xl lg:text-2xl"></i></div>
+                    <h4 class="text-base lg:text-xl font-bold mb-2 font-serif text-stone-900 text-center">당뇨 관리</h4>
+                    <p class="text-stone-500 text-[10px] lg:text-sm leading-relaxed text-center">천연 혈당 강하.</p>
                 </div>
-                <div class="p-8 rounded-2xl bg-white/50 border border-stone-100 shadow-sm transition-all hover:bg-white text-center text-center text-center text-center">
-                    <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-6 mx-auto text-center text-center text-center text-center"><i class="fas fa-spa text-orange-700 text-2xl text-center text-center text-center text-center"></i></div>
-                    <h4 class="text-xl font-bold mb-4 font-serif text-stone-900 text-center text-center">피부 및 소화</h4>
-                    <p class="text-stone-500 text-sm leading-relaxed text-center text-center text-center">뮤신 성분이 위를 보호하며 피부를 맑고 탄력 있게 합니다.</p>
+                <div class="p-6 lg:p-8 rounded-2xl bg-white/50 border border-stone-100 shadow-sm transition-all hover:bg-white text-center">
+                    <div class="w-12 h-12 lg:w-16 lg:h-16 bg-orange-100 rounded-full flex items-center justify-center mb-6 mx-auto text-center"><i class="fas fa-spa text-orange-700 text-xl lg:text-2xl"></i></div>
+                    <h4 class="text-base lg:text-xl font-bold mb-2 font-serif text-stone-900 text-center">피부 소화</h4>
+                    <p class="text-stone-500 text-[10px] lg:text-sm leading-relaxed text-center">위를 보호합니다.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Menu Section -->
-    <section id="menu" class="py-32 bg-white">
-        <div class="max-w-7xl mx-auto px-10 text-center">
-            <div class="text-center mb-24">
-                <h2 class="text-5xl font-serif font-black mb-6 text-stone-900">정성을 담은 차림표</h2>
+    <section id="menu" class="py-24 bg-white px-4 lg:px-10">
+        <div class="max-w-7xl mx-auto text-center">
+            <div class="text-center mb-12 lg:mb-24">
+                <h2 class="text-3xl lg:text-5xl font-serif font-black text-stone-900">정성을 담은 차림표</h2>
             </div>
             
-            <div class="grid lg:grid-cols-2 gap-12 mb-20 text-center">
-                <div class="group relative bg-stone-900 p-12 rounded-[3.5rem] shadow-2xl border-t-8 border-red-700 text-white flex flex-col justify-between min-h-[450px] menu-card text-center">
-                    <div class="absolute -top-6 -right-6 bg-red-600 text-white w-24 h-24 rounded-full flex flex-col items-center justify-center border-4 border-white shadow-xl rotate-12 badge-pulse text-center">
-                        <span class="text-xs font-black uppercase tracking-tighter text-center">Ranking</span>
-                        <span class="text-3xl font-black italic text-center">1위</span>
-                    </div>
+            <div class="grid grid-cols-2 gap-3 lg:gap-12 mb-10 lg:mb-20">
+                <!-- 낙지볶음 -->
+                <div class="group relative bg-stone-900 p-4 lg:p-10 rounded-[1.5rem] lg:rounded-[3.5rem] shadow-2xl border-t-4 lg:border-t-8 border-red-700 text-white flex flex-col justify-center min-h-[180px] lg:min-h-[250px] menu-card text-center overflow-hidden">
                     <div>
-                        <div class="flex justify-between items-start mb-8 text-center text-center">
-                            <span class="text-red-400 font-black tracking-widest text-xs uppercase bg-white/10 px-4 py-1 rounded-full text-center text-center">Signature Menu</span>
-                            <span class="text-4xl font-black text-white text-right">13,000원</span>
+                        <div class="flex flex-col lg:flex-row justify-between items-center mb-2 lg:mb-6">
+                            <span class="text-red-400 font-black tracking-widest text-[8px] lg:text-xs uppercase bg-white/10 px-2 lg:px-4 py-0.5 lg:py-1 rounded-full mb-1 lg:mb-0">Signature</span>
+                            <span class="main-menu-price font-black no-wrap">13,000원</span>
                         </div>
-                        <h4 class="text-5xl font-serif font-black mb-6 leading-tight">매콤 낙지볶음</h4>
-                        <p class="text-stone-400 text-lg leading-relaxed lg:text-left text-center">통통한 낙지와 불맛이 살아있는 매콤한 비법 양념. 솥밥에 슥슥 비벼 드시면 최고의 맛을 경험하실 수 있습니다.</p>
+                        <h4 class="main-menu-title font-serif font-black mb-2 lg:mb-4 leading-tight">매콤 낙지볶음</h4>
+                        <p class="main-menu-desc text-stone-400 leading-relaxed hidden md:block">불맛 가득한 비법 양념.</p>
                     </div>
                 </div>
 
-                <div class="bg-stone-50 p-12 rounded-[3.5rem] shadow-xl border-t-8 border-orange-700 menu-card flex flex-col justify-between min-h-[450px] text-center text-center">
+                <!-- 추어탕 -->
+                <div class="bg-stone-50 p-4 lg:p-10 rounded-[1.5rem] lg:rounded-[3.5rem] shadow-xl border-t-4 lg:border-t-8 border-orange-700 menu-card flex flex-col justify-center min-h-[180px] lg:min-h-[250px] text-center">
                     <div>
-                        <div class="flex justify-between items-start mb-8 text-center text-center text-center text-center">
-                            <span class="text-orange-700 font-black tracking-widest text-xs uppercase bg-orange-100 px-4 py-1 rounded-full text-center text-center">Daily Health</span>
-                            <span class="text-4xl font-black text-stone-900 text-right text-center">11,000원</span>
+                        <div class="flex flex-col lg:flex-row justify-between items-center mb-2 lg:mb-6">
+                            <span class="text-orange-700 font-black tracking-widest text-[8px] lg:text-xs uppercase bg-orange-100 px-2 lg:px-4 py-0.5 lg:py-1 rounded-full mb-1 lg:mb-0">Health</span>
+                            <span class="main-menu-price font-black text-stone-900 no-wrap">11,000원</span>
                         </div>
-                        <h4 class="text-5xl font-serif font-black mb-6 leading-tight text-stone-900 lg:text-left text-center">뽕나무 추어탕</h4>
-                        <p class="text-stone-500 text-lg leading-relaxed lg:text-left text-center">특허받은 뽕나무 육수로 끓여내어 비린내가 전혀 없는 서산 최고의 건강 보양식입니다.</p>
+                        <h4 class="main-menu-title font-serif font-black mb-2 lg:mb-4 leading-tight text-stone-900">뽕나무 추어탕</h4>
+                        <p class="main-menu-desc text-stone-500 leading-relaxed hidden md:block">비린내 없는 깊은 맛.</p>
                     </div>
                 </div>
             </div>
             
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 text-center text-center">
-                <div class="bg-white p-8 rounded-3xl flex justify-between items-center shadow-sm border border-stone-100 font-bold hover:border-orange-200 transition-colors text-center text-center">
-                    <div class="text-left text-center text-center text-center"><span class="block text-[10px] text-stone-400 uppercase tracking-widest mb-1 text-center text-center text-center text-center">Hearty Meal</span><span class="text-lg text-center text-center text-center text-center">제육볶음</span></div>
-                    <span class="text-orange-700 text-xl font-black text-center text-center text-center text-center">13,000원</span>
+            <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-6">
+                <div class="bg-white p-4 lg:p-8 rounded-xl lg:rounded-3xl flex justify-between items-center shadow-sm border border-stone-100 font-bold hover:border-orange-200 transition-colors">
+                    <div class="text-left"><span class="block text-[8px] lg:text-[10px] text-stone-400 uppercase tracking-widest">Meal</span><span class="text-xs lg:text-lg">제육볶음</span></div>
+                    <span class="text-orange-700 text-sm lg:text-xl font-black">13,000원</span>
                 </div>
-                <div class="bg-white p-8 rounded-3xl flex justify-between items-center shadow-sm border border-stone-100 font-bold hover:border-orange-200 transition-colors text-center text-center text-center">
-                    <div class="text-left text-center text-center text-center text-center text-center text-center text-center text-center"><span class="block text-[10px] text-stone-400 uppercase tracking-widest mb-1 text-center text-center text-center text-center text-center">Traditional</span><span class="text-lg text-center">삼계탕</span></div>
-                    <span class="text-orange-700 text-xl font-black text-center text-center text-center text-center">15,000원</span>
+                <div class="bg-white p-4 lg:p-8 rounded-xl lg:rounded-3xl flex justify-between items-center shadow-sm border border-stone-100 font-bold hover:border-orange-200 transition-colors">
+                    <div class="text-left"><span class="block text-[8px] lg:text-[10px] text-stone-400 uppercase tracking-widest">Premium</span><span class="text-xs lg:text-lg">삼계탕</span></div>
+                    <span class="text-orange-700 text-sm lg:text-xl font-black">15,000원</span>
                 </div>
-                <div class="bg-white p-8 rounded-3xl flex justify-between items-center shadow-sm border border-stone-100 font-bold hover:border-orange-200 transition-colors text-center text-center text-center text-center">
-                    <div class="text-left text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center"><span class="block text-[10px] text-stone-400 uppercase tracking-widest mb-1 text-left text-center text-center text-center text-center text-center text-center">Crispy Side</span><span class="text-lg text-center">미꾸라지 튀김</span></div>
-                    <span class="text-orange-700 text-xl font-black text-center text-center text-center text-center">15,000원</span>
+                <div class="bg-white p-4 lg:p-8 rounded-xl lg:rounded-3xl flex justify-between items-center shadow-sm border border-stone-100 font-bold hover:border-orange-200 transition-colors">
+                    <div class="text-left"><span class="block text-[8px] lg:text-[10px] text-stone-400 uppercase tracking-widest">Crispy</span><span class="text-xs lg:text-lg">미꾸라지 튀김</span></div>
+                    <span class="text-orange-700 text-sm lg:text-xl font-black">15,000원</span>
                 </div>
-                <div class="bg-white p-8 rounded-3xl flex justify-between items-center shadow-sm border border-stone-100 font-bold hover:border-orange-200 transition-colors text-center text-center text-center text-center">
-                    <div class="text-left text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center"><span class="block text-[10px] text-stone-400 uppercase tracking-widest mb-1 text-left text-center text-center text-center text-center text-center text-center">Pancake</span><span class="text-lg text-center">부추전</span></div>
-                    <span class="text-orange-700 text-xl font-black text-center text-center text-center text-center">18,000원</span>
+                <div class="bg-white p-4 lg:p-8 rounded-xl lg:rounded-3xl flex justify-between items-center shadow-sm border border-stone-100 font-bold hover:border-orange-200 transition-colors">
+                    <div class="text-left"><span class="block text-[8px] lg:text-[10px] text-stone-400 uppercase tracking-widest">Pancake</span><span class="text-xs lg:text-lg">바삭 부추전</span></div>
+                    <span class="text-orange-700 text-sm lg:text-xl font-black">18,000원</span>
                 </div>
-                <div class="bg-white p-8 rounded-3xl flex justify-between items-center shadow-sm border border-stone-100 font-bold hover:border-orange-200 transition-colors text-center text-center text-center text-center">
-                    <div class="text-left text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center"><span class="block text-[10px] text-stone-400 uppercase tracking-widest mb-1 text-left text-center text-center text-center text-center text-center text-center">Authentic</span><span class="text-lg text-center">김치전</span></div>
-                    <span class="text-orange-700 text-xl font-black text-center text-center text-center text-center text-center">18,000원</span>
+                <div class="bg-white p-4 lg:p-8 rounded-xl lg:rounded-3xl flex justify-between items-center shadow-sm border border-stone-100 font-bold hover:border-orange-200 transition-colors">
+                    <div class="text-left"><span class="block text-[8px] lg:text-[10px] text-stone-400 uppercase tracking-widest">Authentic</span><span class="text-xs lg:text-lg">전통 김치전</span></div>
+                    <span class="text-orange-700 text-sm lg:text-xl font-black">18,000원</span>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Gallery Section -->
-    <section id="gallery" class="py-32 bg-stone-50 overflow-hidden border-y border-stone-100 text-center lg:text-left text-center">
-        <div class="max-w-7xl mx-auto px-10 text-center">
-            <div class="mb-16 text-center lg:text-left text-center text-center text-center text-center">
-                <h3 class="text-orange-700 font-black text-sm tracking-widest mb-2 uppercase tracking-[0.3em] text-center lg:text-left text-center text-center text-center text-center">Food Gallery</h3>
-                <h2 class="text-5xl font-serif font-black text-stone-900 text-center lg:text-left text-center text-center text-center text-center">뽕나무 명품 요리 갤러리</h2>
+    <section id="gallery" class="py-24 bg-stone-50 overflow-hidden border-y border-stone-100">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+            <div class="mb-12 text-center lg:text-left">
+                <h3 class="text-orange-700 font-black text-sm tracking-widest mb-2 uppercase tracking-[0.3em]">Food Gallery</h3>
+                <h2 class="text-3xl lg:text-5xl font-serif font-black text-stone-900">뽕나무 명품 요리 갤러리</h2>
             </div>
 
-            <div class="flex flex-col lg:flex-row items-stretch gap-8 lg:h-[550px] text-center lg:text-left text-center text-center text-center text-center">
-                <div class="w-full lg:w-1/3 text-center">
-                    <div class="gallery-main-viewer group text-center text-center text-center text-center text-center">
-                        <img id="main-gallery-img" src="/img/img2.jpg" alt="메인 이미지">
+            <div class="flex flex-col gap-6 lg:gap-8">
+                <!-- 상단: 메인이미지와 설명 -->
+                <div class="flex flex-row gap-4 lg:gap-10 items-stretch">
+                    <!-- 메인 이미지 (50%) -->
+                    <div class="w-1/2 lg:w-1/3">
+                        <div class="gallery-main-viewer aspect-[4/5] lg:aspect-square">
+                            <img id="main-gallery-img" src="/img/img2.jpg" alt="메인 이미지">
+                        </div>
+                    </div>
+
+                    <!-- 텍스트 내용 (50%, 좌측 정렬 및 상단 배치 최적화) -->
+                    <div class="w-1/2 lg:w-2/3">
+                        <div class="gallery-content-box h-full bg-white rounded-[1.5rem] lg:rounded-[2.5rem] shadow-sm border border-stone-200 text-left">
+                            <div class="flex flex-col items-start gap-1 lg:gap-3 mb-3 lg:mb-10">
+                                <span class="bg-orange-700 text-white px-2 lg:px-5 py-0.5 lg:py-2 rounded-full text-[8px] lg:text-[11px] font-black uppercase tracking-widest shadow-sm no-wrap" id="top-badge">Signature</span>
+                                <span class="text-stone-300 font-bold text-[7px] lg:text-xs uppercase tracking-tighter no-wrap">Kitchen Highlight</span>
+                            </div>
+                            <h4 class="gallery-fluid-title font-serif font-black text-stone-900 mb-3 lg:mb-12 leading-tight text-left" id="top-title">매콤 낙지볶음</h4>
+                            <p class="gallery-fluid-text text-stone-500 font-medium max-w-2xl text-left" id="top-desc">입맛을 사로잡는 마법의 매운맛과 통통한 낙지의 조화.</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="w-full lg:w-2/3 flex flex-col text-center lg:text-left text-center text-center text-center text-center">
-                    <div class="flex-grow p-12 bg-white rounded-[2.5rem] shadow-sm border border-stone-200 mb-6 flex flex-col justify-center text-center lg:text-left text-center text-center text-center text-center">
-                        <div class="flex flex-col items-center lg:items-start gap-[5px] mb-6 text-center text-center text-center text-center text-center">
-                            <span class="bg-orange-700 text-white px-4 py-1.5 rounded-full text-[11px] font-black uppercase tracking-widest shadow-sm text-center text-center text-center text-center text-center" id="top-badge">Signature</span>
-                            <span class="text-stone-300 font-bold text-xs uppercase tracking-tighter text-center text-center text-center text-center text-center text-center">Kitchen Highlight</span>
+                <!-- 하단: 썸네일 슬라이더 -->
+                <div class="bg-stone-100/50 p-4 lg:p-6 rounded-[1.5rem] lg:rounded-[2.5rem] border border-stone-200/50">
+                    <div class="flex justify-between items-center mb-3 lg:mb-4 px-2">
+                        <span class="text-stone-400 text-[8px] lg:text-[10px] font-black uppercase tracking-widest no-wrap">자동 슬라이드</span>
+                        <div class="flex gap-2">
+                            <button onclick="prevGallery()" class="w-6 h-6 lg:w-8 lg:h-8 rounded-full bg-white border border-stone-200 flex items-center justify-center hover:bg-stone-900 hover:text-white transition shadow-sm"><i class="fas fa-chevron-left text-[8px] lg:text-[10px]"></i></button>
+                            <button onclick="nextGallery()" class="w-6 h-6 lg:w-8 lg:h-8 rounded-full bg-white border border-stone-200 flex items-center justify-center hover:bg-stone-900 hover:text-white transition shadow-sm"><i class="fas fa-chevron-right text-[8px] lg:text-[10px]"></i></button>
                         </div>
-                        <h4 class="text-5xl font-serif font-black text-stone-900 mb-6 text-center lg:text-left text-center text-center text-center text-center" id="top-title">매콤 낙지볶음</h4>
-                        <p class="text-stone-500 text-xl font-medium leading-relaxed max-w-2xl text-center lg:text-left mx-auto lg:mx-0 text-center text-center text-center text-center" id="top-desc">입맛을 사로잡는 마법의 매운맛과 통통한 낙지의 조화. 가마솥 밥과 함께라면 최고의 한 끼가 됩니다.</p>
                     </div>
-
-                    <div class="bg-stone-100/50 p-6 rounded-[2.5rem] border border-stone-200/50 text-center text-center text-center text-center text-center text-center">
-                        <div class="flex justify-between items-center mb-4 px-2 text-center lg:text-left text-center text-center text-center text-center text-center text-center">
-                            <span class="text-stone-400 text-[10px] font-black uppercase tracking-widest text-center text-center text-center text-center">3초마다 자동 슬라이드</span>
-                            <div class="flex gap-2 text-center text-center text-center text-center text-center text-center text-center text-center">
-                                <button onclick="prevGallery()" class="w-8 h-8 rounded-full bg-white border border-stone-200 flex items-center justify-center hover:bg-stone-900 hover:text-white transition shadow-sm text-center text-center text-center text-center text-center text-center text-center text-center"><i class="fas fa-chevron-left text-[10px] text-center text-center text-center text-center text-center text-center text-center text-center"></i></button>
-                                <button onclick="nextGallery()" class="w-8 h-8 rounded-full bg-white border border-stone-200 flex items-center justify-center hover:bg-stone-900 hover:text-white transition shadow-sm text-center text-center text-center text-center text-center text-center text-center text-center text-center"><i class="fas fa-chevron-right text-[10px] text-center text-center text-center text-center text-center text-center text-center text-center text-center"></i></button>
-                            </div>
-                        </div>
-                        <div id="thumb-slider" class="gallery-slider-container">
-                            <!-- JS Generated -->
-                        </div>
+                    <div id="thumb-slider" class="gallery-slider-container pb-1">
+                        <!-- JS Generated -->
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Info Section (Address Updated to Haemi-myeon) -->
-    <section id="location" class="py-24 px-10 bg-white">
+    <!-- Info Section -->
+    <section id="location" class="py-24 px-6 lg:px-10 bg-white">
         <div class="max-w-7xl mx-auto">
-            <div class="flex flex-col lg:flex-row-reverse gap-10 lg:items-stretch">
-                <!-- Right: Map Column -->
-                <div class="lg:w-1/2">
-                    <div class="location-container p-0 overflow-hidden shadow-sm h-full text-center">
-                        <iframe 
-                            width="100%" 
-                            height="100%" 
-                            frameborder="0" 
-                            style="border:0; height: 100%; min-height: 500px;" 
-                            src="https://maps.google.com/maps?q=충청남도 서산시 해미면 기지1길 4&t=&z=17&ie=UTF8&iwloc=&output=embed" 
-                            allowfullscreen>
-                        </iframe>
+            <div class="flex flex-col lg:flex-row-reverse gap-8 lg:gap-10">
+                <div class="lg:w-1/2 min-h-[350px]">
+                    <div class="location-container p-0 overflow-hidden shadow-sm h-full border border-stone-200">
+                        <iframe width="100%" height="100%" frameborder="0" style="border:0; height: 100%; min-height: 350px;" src="https://maps.google.com/maps?q=충청남도 서산시 해미면 기지1길 4&t=&z=17&ie=UTF8&iwloc=&output=embed" allowfullscreen></iframe>
                     </div>
                 </div>
                 
-                <!-- Left: Info Column -->
                 <div class="lg:w-1/2 flex flex-col gap-6">
                     <div class="location-container">
-                        <div class="flex items-center gap-4 mb-6 text-center lg:text-left">
-                            <div class="w-12 h-12 bg-stone-900 rounded-full flex items-center justify-center text-white shadow-lg"><i class="fas fa-map-marker-alt text-lg"></i></div>
-                            <h3 class="font-black text-stone-900 text-xl">위치 정보</h3>
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-stone-900 rounded-full flex items-center justify-center text-white shadow-lg"><i class="fas fa-map-marker-alt"></i></div>
+                            <h3 class="font-black text-stone-900 text-lg lg:text-xl">위치 정보</h3>
                         </div>
-                        <p class="text-lg font-bold text-stone-950 mb-1 lg:text-left">충청남도 서산시 해미면 기지1길 4</p>
-                        <p class="text-stone-500 text-sm lg:text-left">서산 해미면 다이닝코드 선정 명품 맛집</p>
+                        <p class="text-base lg:text-xl font-bold text-stone-950 mb-1">충청남도 서산시 해미면 기지1길 4</p>
+                        <p class="text-stone-500 text-xs lg:text-sm">서산 해미면 다이닝코드 선정 맛집</p>
                     </div>
 
                     <div class="location-container">
-                        <div class="flex items-center gap-4 mb-8 text-center lg:text-left">
-                            <div class="w-12 h-12 bg-orange-700 rounded-full flex items-center justify-center text-white shadow-lg"><i class="far fa-clock text-lg text-center text-center"></i></div>
-                            <h3 class="font-black text-stone-900 text-xl">영업시간 안내</h3>
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-orange-700 rounded-full flex items-center justify-center text-white shadow-lg"><i class="far fa-clock"></i></div>
+                            <h3 class="font-black text-stone-900 text-lg lg:text-xl">영업시간 안내</h3>
                         </div>
-                        <div id="timetable-list" class="w-full space-y-4 text-center lg:text-left text-center"></div>
-                        <div class="mt-8 pt-4 border-t border-stone-100 text-xs text-stone-400 italic text-center lg:text-left">
-                            * 재료 소진 시 조기 마감될 수 있습니다. 문의: 041-688-8853
-                        </div>
+                        <div id="timetable-list" class="w-full space-y-3"></div>
                     </div>
                 </div>
             </div>
@@ -445,54 +507,37 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-stone-900 text-white py-20 px-10 text-center">
-        <div class="max-w-7xl mx-auto text-center text-center">
-            <div class="text-3xl font-serif font-black mb-6 text-center text-center text-center">뽕나무추어탕 <span class="text-orange-400">&</span> 낙지볶음</div>
-            <p class="text-stone-500 text-sm mb-12 text-center text-center text-center text-center">서산의 명소 해미면에서 정직한 보약 한 상을 대접합니다.</p>
-            <div class="text-stone-600 text-[11px] text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center">
-                © 2026 Mulberry Tree Chueotang. All rights reserved. | 충청남도 서산시 해미면 기지1길 4 | TEL. 041-688-8853
-            </div>
+    <footer class="bg-stone-900 text-white py-12 px-10 text-center">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-xl lg:text-2xl font-serif font-black mb-4 no-wrap">뽕나무추어탕 <span class="text-orange-400">&</span> 낙지볶음</div>
+            <p class="text-stone-500 text-[10px] lg:text-xs">© 2026 Mulberry Tree. 서산시 해미면 기지1길 4 | 041-688-8853</p>
         </div>
     </footer>
 
     <script>
-        // Navbar Scroll Logic (Enhanced for Mobile)
         const navbar = document.getElementById('navbar');
         const logo = document.getElementById('nav-logo');
         const links = document.getElementById('nav-links');
-        const mobileBtn = document.getElementById('mobile-menu-btn');
 
         window.addEventListener('scroll', () => {
-            const scrollValue = window.scrollY || document.documentElement.scrollTop;
-            const isScrolled = scrollValue > 30;
-
+            const isScrolled = window.scrollY > 30;
             navbar.classList.toggle('nav-scrolled', isScrolled);
-            
             if (isScrolled) {
-                logo.classList.remove('text-white');
-                logo.classList.add('text-stone-900');
-                links.classList.remove('text-white');
-                links.classList.add('text-stone-600');
-                mobileBtn.classList.remove('text-white');
-                mobileBtn.classList.add('text-stone-900');
+                logo.classList.replace('text-white', 'text-stone-900');
+                links?.classList.replace('text-white', 'text-stone-600');
             } else {
-                logo.classList.remove('text-stone-900');
-                logo.classList.add('text-white');
-                links.classList.remove('text-stone-600');
-                links.classList.add('text-white');
-                mobileBtn.classList.remove('text-stone-900');
-                mobileBtn.classList.add('text-white');
+                logo.classList.replace('text-stone-900', 'text-white');
+                links?.classList.replace('text-stone-600', 'text-white');
             }
         });
 
-        // Gallery Data
         const galleryData = [
-            { img: '/img/img2.jpg', title: '매콤 낙지볶음', desc: '입맛을 사로잡는 마법의 매운맛과 통통한 낙지의 조화.', badge: 'Signature' },
-            { img: '/img/img1.jpg', title: '뽕나무 추어탕', desc: '특허받은 뽕나무 육수로 끓인 비린내 없는 깊은 맛.', badge: 'Health' },
-            { img: '/img/img3.jpg', title: '정갈한 제육볶음', desc: '신선한 국내산 돼지고기와 특제 양념의 든든한 만남. 남녀노소 누구나 좋아하는 인기 메뉴.', badge: 'Meal' },
-            { img: '/img/img4.jpg', title: '보양 삼계탕', desc: '기력 회복에 으뜸인 진국 육수와 영계의 부드러움. 정성을 가득 담아 푹 고아냈습니다.', badge: 'Premium' },
-            { img: '/img/img5.jpg', title: '미꾸라지 튀김', desc: '겉은 바삭하고 속은 고소한 영양 만점 별미 간식. 추어탕과 함께 드시면 더욱 좋습니다.', badge: 'Crispy' },
-            { img: '/img/img6.jpg', title: '명품 부추전', desc: '신선한 부추와 재료를 아끼지 않아 더욱 바삭하고 풍부한 맛을 자랑하는 명품 전 요리.', badge: 'Pancake' }
+            { img: '/img/img2.jpg', title: '매콤 낙지볶음', desc: '입맛을 사로잡는 마법의 매운맛.' },
+            { img: '/img/img1.jpg', title: '뽕나무 추어탕', desc: '특허받은 육수의 깊은 감동.' },
+            { img: '/img/img3.jpg', title: '제육볶음', desc: '남녀노소 좋아하는 든든함.' },
+            { img: '/img/img4.jpg', title: '삼계탕', desc: '정성으로 푹 고아낸 보양.' },
+            { img: '/img/img5.jpg', title: '미꾸라지 튀김', desc: '고소하고 바삭한 별미.' },
+            { img: '/img/img6.jpg', title: '명품 부추전', desc: '신선한 재료의 풍부한 맛.' }
         ];
 
         let currentIdx = 0;
@@ -528,7 +573,6 @@
             mainImg.style.opacity = '0';
             setTimeout(() => {
                 mainImg.src = data.img;
-                topBadge.innerText = data.badge;
                 topTitle.innerText = data.title;
                 topDesc.innerText = data.desc;
                 mainImg.style.opacity = '1';
@@ -537,78 +581,38 @@
             thumbs.forEach((t, i) => {
                 if (i === currentIdx) {
                     t.classList.add('active');
-                    const offsetLeft = t.offsetLeft - slider.offsetLeft;
-                    slider.scrollTo({
-                        left: offsetLeft - (slider.clientWidth / 2) + (t.clientWidth / 2),
-                        behavior: 'smooth'
-                    });
-                } else {
-                    t.classList.remove('active');
-                }
+                    slider.scrollTo({ left: t.offsetLeft - (slider.clientWidth / 2) + (t.clientWidth / 2), behavior: 'smooth' });
+                } else { t.classList.remove('active'); }
             });
         }
 
-        function nextGallery() {
-            currentIdx = (currentIdx + 1) % galleryData.length;
-            updateGalleryUI();
-        }
+        function nextGallery() { currentIdx = (currentIdx + 1) % galleryData.length; updateGalleryUI(); }
+        function prevGallery() { currentIdx = (currentIdx - 1 + galleryData.length) % galleryData.length; updateGalleryUI(); }
+        function startAutoSlide() { slideInterval = setInterval(nextGallery, 3000); }
+        function resetInterval() { clearInterval(slideInterval); startAutoSlide(); }
 
-        function prevGallery() {
-            currentIdx = (currentIdx - 1 + galleryData.length) % galleryData.length;
-            updateGalleryUI();
-        }
-
-        function startAutoSlide() {
-            slideInterval = setInterval(nextGallery, 3000);
-        }
-
-        function resetInterval() {
-            clearInterval(slideInterval);
-            startAutoSlide();
-        }
-
-        // Dynamic Timetable Logic (Included Break Time for all days)
         function renderTimetable() {
             const listContainer = document.getElementById('timetable-list');
-            if(!listContainer) return;
             const days = ['일', '월', '화', '수', '목', '금', '토'];
             const today = new Date();
             let html = '';
             for (let i = 0; i < 7; i++) {
                 const targetDate = new Date();
                 targetDate.setDate(today.getDate() + i);
-                const month = targetDate.getMonth() + 1;
-                const date = targetDate.getDate();
-                const dayLabel = days[targetDate.getDay()];
-                const isToday = i === 0;
                 const isSunday = targetDate.getDay() === 0;
-                const dateString = `${isToday ? '오늘' : month + '월 ' + date + '일'}(${dayLabel})`;
+                const isToday = i === 0;
+                const dateString = `${isToday ? '오늘' : (targetDate.getMonth()+1) + '월 ' + targetDate.getDate() + '일'}(${days[targetDate.getDay()]})`;
                 
                 if (isSunday) {
-                    html += `
-                        <div class="timetable-row flex justify-between items-center bg-red-50/50 p-4 rounded-xl mb-2 text-center text-center">
-                            <span class="font-black text-red-700">${dateString}</span>
-                            <span class="font-black text-red-700 bg-white px-3 py-1 rounded shadow-sm text-xs text-center text-center text-center text-center text-center">정기 휴무</span>
-                        </div>`;
+                    html += `<div class="timetable-row flex justify-between bg-red-50/50 p-2 lg:p-4 rounded-lg lg:rounded-xl text-center"><span class="font-black text-red-700 text-xs lg:text-sm">${dateString}</span><span class="font-black text-red-700 bg-white px-2 py-0.5 rounded shadow-sm text-[10px]">정기 휴무</span></div>`;
                 } else {
-                    html += `
-                        <div class="timetable-row flex justify-between items-center p-3 border-b border-stone-100 ${isToday ? 'bg-orange-50/30 rounded-xl border-none shadow-sm' : ''} text-center">
-                            <span class="font-bold ${isToday ? 'text-stone-900' : 'text-stone-600'} text-center">${dateString}</span>
-                            <div class="text-right text-center text-center">
-                                <span class="block text-xs font-black ${isToday ? 'text-stone-900' : 'text-stone-500'}">영업: 11:20 - 20:00</span>
-                                <span class="block text-[10px] text-stone-400 font-medium">Break: 15:00 - 17:00</span>
-                                <span class="block text-[10px] text-orange-700 font-bold">라스트오더: 19:20</span>
-                            </div>
-                        </div>`;
+                    html += `<div class="timetable-row flex justify-between p-2 border-b border-stone-50 ${isToday ? 'bg-orange-50/30 rounded-lg' : ''}"><span class="font-bold text-xs lg:text-sm ${isToday ? 'text-stone-900' : 'text-stone-600'}">${dateString}</span><div class="text-right"><span class="block text-[10px] lg:text-xs font-black ${isToday ? 'text-stone-900' : 'text-stone-500'}">11:20 - 20:00</span><span class="block text-[8px] lg:text-[10px] text-stone-400">Break 15-17시</span></div></div>`;
                 }
             }
             listContainer.innerHTML = html;
         }
 
-        window.addEventListener('load', () => {
-            initGallery();
-            renderTimetable();
-        });
+        window.addEventListener('load', () => { initGallery(); renderTimetable(); });
     </script>
 </body>
 </html>
