@@ -208,44 +208,89 @@
     </div>
 
     <div id="page-odi" class="page-section pt-20 bg-purple-50/30">
-        <section class="bg-purple-900 text-white py-24 relative overflow-hidden">
-            <div class="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1596434453535-64f331ea0d6b?auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center mix-blend-overlay"></div>
+        <!-- Hero -->
+        <section class="relative overflow-hidden py-24 md:py-32 bg-gradient-to-br from-purple-800 via-purple-700 to-fuchsia-800 text-white">
+            <div class="absolute -top-24 -left-24 w-96 h-96 bg-purple-400/30 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-32 -right-16 w-[28rem] h-[28rem] bg-fuchsia-400/20 rounded-full blur-3xl"></div>
+            <div class="absolute top-1/3 right-1/4 w-40 h-40 bg-pink-300/20 rounded-full blur-2xl"></div>
             <div class="max-w-4xl mx-auto px-4 relative z-10 text-center">
-                <span class="inline-block px-4 py-1 bg-purple-500/30 border border-purple-400/50 rounded-full text-purple-200 text-sm font-bold mb-6" id="odiBadge" data-edit-type="text">계절 한정 특별 판매</span>
+                <span class="inline-flex items-center gap-2 px-5 py-2 bg-white/10 backdrop-blur border border-white/20 rounded-full text-purple-100 text-sm font-bold mb-8 shadow-lg" id="odiBadge" data-edit-type="text">🍇 계절 한정 특별 판매</span>
                 <h1 class="text-4xl md:text-6xl font-black mb-6 leading-tight" id="odiTitle" data-edit-type="text">자연이 준 보랏빛 선물,<br>서산 참뽕나무 오디즙</h1>
-                <p class="text-xl text-purple-200 font-light" id="odiDesc" data-edit-type="text">직접 재배한 무농약 오디를 진하게 착즙했습니다.</p>
+                <p class="text-lg md:text-xl text-purple-200 font-light max-w-xl mx-auto" id="odiDesc" data-edit-type="text">직접 재배한 무농약 오디를 진하게 착즙했습니다.</p>
             </div>
         </section>
 
-        <section class="py-20 max-w-5xl mx-auto px-4">
-            <div class="bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row">
-                <div class="w-full md:w-1/2 p-10 md:p-16 flex flex-col justify-center">
-                    <h3 class="text-3xl font-black text-gray-900 mb-6" id="odiInfoTitle" data-edit-type="text">블랙푸드의 대명사, 오디</h3>
-                    <p class="text-gray-600 mb-4 leading-relaxed" id="odiInfo1" data-edit-type="text">안토시아닌이 풍부하여 눈 건강과 노화 방지에 탁월합니다.</p>
-                </div>
-                <div class="w-full md:w-1/2 relative h-64 md:h-auto">
-                    <img id="odiInfoImg" src="https://images.unsplash.com/photo-1596434453535-64f331ea0d6b?auto=format&fit=crop&w=800&q=80" class="absolute inset-0 w-full h-full object-cover" data-edit-type="image">
-                </div>
-            </div>
-        </section>
-
+        <!-- 효능 카드 -->
         <section class="py-20 bg-white">
-            <div class="max-w-4xl mx-auto px-4">
-                <div class="bg-purple-50 p-8 rounded-3xl border border-purple-100 mb-12 flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div>
-                        <h4 class="text-2xl font-bold text-gray-900 mb-2" id="odiProductName" data-edit-type="text">100% 착즙 오디즙 (1박스)</h4>
-                        <p class="text-gray-500" id="odiProductVol" data-edit-type="text">용량: 100ml x 30포</p>
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-14">
+                    <span class="text-purple-600 font-bold tracking-widest text-sm mb-2 block">MULBERRY BENEFITS</span>
+                    <h2 class="text-3xl md:text-4xl font-black text-gray-900">오디 한 잔에 담긴 건강</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-purple-50/60 border border-purple-100 rounded-[2rem] p-8 text-center hover:shadow-lg hover:-translate-y-1 transition duration-300">
+                        <div class="w-14 h-14 mx-auto bg-purple-600 text-white rounded-full flex items-center justify-center text-xl mb-5 shadow-md"><i class="fa-solid fa-eye"></i></div>
+                        <h4 class="text-lg font-bold text-gray-900 mb-2" id="odiBenefit1Title" data-edit-type="text">눈 건강</h4>
+                        <p class="text-gray-500 text-sm" id="odiBenefit1Desc" data-edit-type="text">풍부한 안토시아닌이 눈의 피로를 덜어줍니다.</p>
                     </div>
-                    <div class="text-right">
+                    <div class="bg-purple-50/60 border border-purple-100 rounded-[2rem] p-8 text-center hover:shadow-lg hover:-translate-y-1 transition duration-300">
+                        <div class="w-14 h-14 mx-auto bg-purple-600 text-white rounded-full flex items-center justify-center text-xl mb-5 shadow-md"><i class="fa-solid fa-sparkles"></i></div>
+                        <h4 class="text-lg font-bold text-gray-900 mb-2" id="odiBenefit2Title" data-edit-type="text">노화 방지</h4>
+                        <p class="text-gray-500 text-sm" id="odiBenefit2Desc" data-edit-type="text">강력한 항산화 성분으로 활력을 더합니다.</p>
+                    </div>
+                    <div class="bg-purple-50/60 border border-purple-100 rounded-[2rem] p-8 text-center hover:shadow-lg hover:-translate-y-1 transition duration-300">
+                        <div class="w-14 h-14 mx-auto bg-purple-600 text-white rounded-full flex items-center justify-center text-xl mb-5 shadow-md"><i class="fa-solid fa-heart-pulse"></i></div>
+                        <h4 class="text-lg font-bold text-gray-900 mb-2" id="odiBenefit3Title" data-edit-type="text">혈액순환</h4>
+                        <p class="text-gray-500 text-sm" id="odiBenefit3Desc" data-edit-type="text">막힘없이 편안한 하루를 도와줍니다.</p>
+                    </div>
+                    <div class="bg-purple-50/60 border border-purple-100 rounded-[2rem] p-8 text-center hover:shadow-lg hover:-translate-y-1 transition duration-300">
+                        <div class="w-14 h-14 mx-auto bg-purple-600 text-white rounded-full flex items-center justify-center text-xl mb-5 shadow-md"><i class="fa-solid fa-leaf"></i></div>
+                        <h4 class="text-lg font-bold text-gray-900 mb-2" id="odiBenefit4Title" data-edit-type="text">피부 미용</h4>
+                        <p class="text-gray-500 text-sm" id="odiBenefit4Desc" data-edit-type="text">비타민이 풍부해 피부에도 좋습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 소개 -->
+        <section class="py-4 md:py-10 max-w-5xl mx-auto px-4">
+            <div class="relative bg-white rounded-[2.5rem] shadow-2xl shadow-purple-900/10 overflow-hidden flex flex-col md:flex-row border border-purple-50">
+                <div class="w-full md:w-1/2 p-10 md:p-16 flex flex-col justify-center relative z-10">
+                    <span class="text-purple-500 font-bold tracking-widest text-xs mb-4 block">ABOUT MULBERRY</span>
+                    <h3 class="text-3xl font-black text-gray-900 mb-6 leading-snug" id="odiInfoTitle" data-edit-type="text">블랙푸드의 대명사, 오디</h3>
+                    <p class="text-gray-600 leading-relaxed" id="odiInfo1" data-edit-type="text">안토시아닌이 풍부하여 눈 건강과 노화 방지에 탁월합니다.</p>
+                </div>
+                <div class="w-full md:w-1/2 relative h-72 md:h-auto min-h-[280px]">
+                    <img id="odiInfoImg" src="https://images.unsplash.com/photo-1764249453955-d111d50baf8f?auto=format&fit=crop&w=800&q=80" class="absolute inset-0 w-full h-full object-cover" data-edit-type="image">
+                    <div class="absolute inset-0 bg-gradient-to-t from-purple-900/30 via-transparent to-transparent md:bg-gradient-to-l md:from-purple-900/20"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주문 안내 -->
+        <section class="py-20">
+            <div class="max-w-4xl mx-auto px-4">
+                <div class="text-center mb-12">
+                    <span class="text-purple-600 font-bold tracking-widest text-sm mb-2 block">ORDER</span>
+                    <h2 class="text-3xl md:text-4xl font-black text-gray-900">오디즙 주문 안내</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-[2rem] p-8 md:p-10 shadow-lg border border-purple-100 flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center text-xl mb-6"><i class="fa-solid fa-box"></i></div>
+                            <h4 class="text-xl font-bold text-gray-900 mb-2" id="odiProductName" data-edit-type="text">100% 착즙 오디즙 (1박스)</h4>
+                            <p class="text-gray-500 mb-6" id="odiProductVol" data-edit-type="text">용량: 100ml x 30포</p>
+                        </div>
                         <p class="text-3xl font-black text-purple-700" id="odiPriceNew" data-edit-type="text">35,000원</p>
                     </div>
-                </div>
-                
-                <div class="bg-white p-8 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.05)] border border-gray-100 text-center">
-                    <h3 class="text-xl font-bold mb-6">전화 주문 문의</h3>
-                    <div class="bg-gray-50 p-6 rounded-2xl inline-flex items-center justify-center gap-4 mb-6">
-                        <i class="fa-solid fa-phone-volume text-2xl text-purple-600"></i>
-                        <span class="text-2xl md:text-3xl font-black text-gray-900" id="odiPhone" data-edit-type="text">041-665-1234</span>
+                    <div class="bg-purple-900 rounded-[2rem] p-8 md:p-10 shadow-lg text-white flex flex-col justify-between relative overflow-hidden">
+                        <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-purple-500/30 rounded-full blur-2xl"></div>
+                        <div class="relative z-10">
+                            <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-xl mb-6"><i class="fa-solid fa-phone-volume"></i></div>
+                            <h4 class="text-xl font-bold mb-2">전화 주문 문의</h4>
+                            <p class="text-purple-200 text-sm mb-6">친절하게 안내해드립니다.</p>
+                        </div>
+                        <span class="relative z-10 text-2xl md:text-3xl font-black" id="odiPhone" data-edit-type="text">041-665-1234</span>
                     </div>
                 </div>
             </div>
@@ -261,16 +306,14 @@
     <div id="loginModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 transition-opacity">
         <div class="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-black text-gray-900">사장님 로그인</h3>
+                <h3 class="text-xl font-black text-gray-900">운영자 로그인</h3>
                 <button onclick="document.getElementById('loginModal').classList.add('hidden')" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
             <div class="space-y-4">
                 <input type="text" id="idInput" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="아이디">
                 <input type="password" id="pwInput" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="비밀번호">
                 <button onclick="window.processLogin()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-4 rounded-xl shadow-md">로그인하기</button>
-                <div class="text-center mt-4">
-                    <button onclick="document.getElementById('idInput').value='admin'; document.getElementById('pwInput').value='1234';" class="text-xs text-gray-400 underline">지정된 정보 채우기 (테스트용)</button>
-                </div>
+                <p class="text-center text-xs text-gray-400 mt-2">운영자 전용입니다.</p>
             </div>
         </div>
     </div>

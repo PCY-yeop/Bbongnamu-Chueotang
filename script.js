@@ -1,18 +1,23 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 // ==========================================
-// 사장님 로그인 아이디/비밀번호 설정
+// Supabase 설정 (이미지 업로드 + 콘텐츠 저장 공용)
+// Project Settings > API 에서 URL과 anon public key를 확인해 아래에 입력하세요.
+// ==========================================
+const SUPABASE_URL = "https://rqlvyeuctwnmqtesmjpj.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_8LXgGSO8NpdET39_KZtFGg_b5fWwJ_N";
+const SUPABASE_BUCKET = "bbong";
+const CONTENT_TABLE = "site_content";
+const CONTENT_ID = "homepage";
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ==========================================
+// 운영자 로그인 아이디/비밀번호 설정
 // ==========================================
 const ADMIN_CREDENTIALS = {
-    id: "admin",
-    pw: "1234"
+    id: "뽕나무추어탕",
+    pw: "123"
 };
-
-const appId = typeof __app_id !== 'undefined' ? __app_id : 'bbongnamu-app';
-let db, auth, storage, isFirebaseActive = false;
 
 // 클라이언트 상태
 window.state = {
@@ -41,38 +46,30 @@ window.state = {
     }
 };
 
-// Firebase 초기화 로직
-async function initFirebase() {
+// Supabase에서 저장된 콘텐츠 불러오기
+async function loadContent() {
     try {
-        const config = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
-        if (!config) throw new Error("No config");
-        
-        const app = initializeApp(config);
-        db = getFirestore(app);
-        auth = getAuth(app);
-        storage = getStorage(app);
-        isFirebaseActive = true;
+        const { data, error } = await supabase
+            .from(CONTENT_TABLE)
+            .select('data')
+            .eq('id', CONTENT_ID)
+            .maybeSingle();
+        if (error) throw error;
 
-        const token = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-        if (token) await signInWithCustomToken(auth, token);
-        else await signInAnonymously(auth);
-
-        // 실시간 데이터 동기화
-        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'homepage', 'content');
-        onSnapshot(docRef, (snapshot) => {
-            if (snapshot.exists()) {
-                window.state.data = snapshot.data();
-                renderAll();
-            } else {
-                packStaticToData(); 
-                setDoc(docRef, window.state.data);
-            }
-        }, (error) => console.error("Firebase Snapshot Error:", error));
-        
+        if (data && data.data) {
+            window.state.data = data.data;
+        } else {
+            // 저장된 콘텐츠가 아직 없으면 현재 화면 기본값을 최초 저장
+            packStaticToData();
+            const { error: insertError } = await supabase
+                .from(CONTENT_TABLE)
+                .upsert({ id: CONTENT_ID, data: window.state.data });
+            if (insertError) console.warn("초기 콘텐츠 저장 실패:", insertError);
+        }
     } catch(e) {
-        console.warn("로컬 모드 실행 중 (클라우드 미연결)", e);
-        renderAll();
+        console.warn("콘텐츠 불러오기 실패 (기본값으로 표시합니다):", e);
     }
+    renderAll();
 }
 
 // 알림 메시지 (Toast)
@@ -282,17 +279,22 @@ window.handleImageSelected = async function(event) {
     const file = event.target.files[0];
     if(!file) return;
     window.showToast("이미지 업로드 중입니다...");
-    
+
     let imgUrl = "";
-    if (isFirebaseActive && storage) {
-        try {
-            const sRef = ref(storage, `artifacts/${appId}/images/${Date.now()}_${file.name}`);
-            await uploadBytes(sRef, file);
-            imgUrl = await getDownloadURL(sRef);
-        } catch(e) { console.error("Storage upload failed", e); }
-    }
-    
-    if(!imgUrl) {
+    try {
+        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+        const filePath = `uploads/${Date.now()}_${safeName}`;
+        const { error: uploadError } = await supabase.storage
+            .from(SUPABASE_BUCKET)
+            .upload(filePath, file, { cacheControl: '3600', upsert: false });
+        if (uploadError) throw uploadError;
+
+        const { data } = supabase.storage.from(SUPABASE_BUCKET).getPublicUrl(filePath);
+        imgUrl = data.publicUrl;
+    } catch(e) {
+        console.error("Supabase 이미지 업로드 실패:", e);
+        window.showToast("이미지 업로드에 실패했습니다. Supabase 설정을 확인해주세요.");
+        // 업로드 실패 시에도 편집 화면이 끊기지 않도록 임시로 로컬 미리보기만 반영 (저장은 되지 않음)
         imgUrl = await new Promise((res) => {
             const r = new FileReader(); r.onload = (e) => res(e.target.result); r.readAsDataURL(file);
         });
@@ -312,17 +314,17 @@ window.handleImageSelected = async function(event) {
 }
 
 window.saveContentToCloud = async function() {
-    window.showToast("클라우드에 저장하는 중...");
+    window.showToast("저장하는 중...");
     packStaticToData();
-    if(isFirebaseActive && db) {
-        try {
-            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'homepage', 'content'), window.state.data);
-            window.showToast("클라우드에 안전하게 저장되었습니다!");
-        } catch(e) {
-            window.showToast("저장 권한이 없거나 오류가 발생했습니다.");
-        }
-    } else {
-        window.showToast("현재 로컬 모드입니다. 브라우저 메모리에 임시 저장되었습니다.");
+    try {
+        const { error } = await supabase
+            .from(CONTENT_TABLE)
+            .upsert({ id: CONTENT_ID, data: window.state.data, updated_at: new Date().toISOString() });
+        if (error) throw error;
+        window.showToast("저장되었습니다.");
+    } catch(e) {
+        console.error("Supabase 저장 실패:", e);
+        window.showToast("저장에 실패했습니다. Supabase 설정을 확인해주세요.");
     }
     window.toggleEditMode();
 }
@@ -346,5 +348,5 @@ window.addEventListener('DOMContentLoaded', () => {
     if(sessionStorage.getItem('isAdmin') === 'true') {
         window.state.isLoggedIn = true; updateAuthUI();
     }
-    initFirebase();
+    loadContent();
 });
